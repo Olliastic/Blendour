@@ -41,11 +41,12 @@ void setup() {
   shaders[26] = color(255, 255, 0);
 
 
-
+//this isn't needed. the following code just reassigns based on what already exists.
+/*
   for (int i = 0; i < 27; i++) {
     shaders[i] = color(shaders[int(random(27))]);
   }
-
+*/
   myOrb = new Orb(random(10, 390), 0, shaders[int(random(27))]);
 
   mySlider = new slider[3];
@@ -72,6 +73,23 @@ void draw() {
   for (int i = 0; i < myOrbs.size (); i++) {
     Orb orb = myOrbs.get(i);
     orb.display();
+     //now that we've displayed it, let's go through and compare it to all of the other orbs
+     //to see if they're touching
+     //we start with the orb we're on and continue until the end.
+     //if there's 5 orbs, 0 gets tested against 1,2,3,4
+     //1 gets tested against 2,3,4
+     //2 gets tested against 3,4
+     //3 gets tested against 4.
+     
+     for (int j = i + 1; j < myOrbs.size(); j++) {
+       Orb otherOrb = myOrbs.get(j);
+       
+       if(orb.touchingOtherOrb(otherOrb) == true) {
+         newOrb();
+       }  
+     }
+
+
   }
   if (myOrbs.size() > 0) {
     Orb orb = myOrbs.get(myOrbs.size() -1);
@@ -81,6 +99,7 @@ void draw() {
   } else {
     newOrb();
   }
+  
 }
 
 void newOrb() {
